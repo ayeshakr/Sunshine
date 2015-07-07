@@ -11,8 +11,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,8 +59,8 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
         if(id==R.id.action_refresh) {
-            FetchWeatherTask fetchW = new FetchWeatherTask();
-            fetchW.execute("Montreal");
+           /* FetchWeatherTask fetchW = new FetchWeatherTask();
+            fetchW.execute("Montreal");*/
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -67,7 +69,7 @@ public class ForecastFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FetchWeatherTask fetchWeather = new FetchWeatherTask();
+        final FetchWeatherTask fetchWeather = new FetchWeatherTask();
 
         // Create some dummy data for the ListView.  Here's a sample weekly forecast
         String[] data;
@@ -102,7 +104,7 @@ public class ForecastFragment extends Fragment {
         mForecastAdapter =
                 new ArrayAdapter<String>(
                         getActivity(), // The current context (this activity)
-                        R.layout.list_item_forecast, // The name of the layout ID.
+                        R.layout.list_item_forecast, // The name of the layout ID (TextView).
                         R.id.list_item_forecast_textview, // The ID of the textview to populate.
                         weekForecast);
 
@@ -111,6 +113,16 @@ public class ForecastFragment extends Fragment {
         // Get a reference to the ListView, and attach this adapter to it.
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
+
+        final String[] finalData = data;
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String toastText = finalData[i];
+                int duration = Toast.LENGTH_SHORT;
+                Toast.makeText(getActivity(), toastText, duration).show();
+            }
+        });
 
         return rootView;
     }
