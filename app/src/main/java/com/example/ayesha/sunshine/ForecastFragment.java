@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -66,9 +67,24 @@ public class ForecastFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        FetchWeatherTask fetchWeather = new FetchWeatherTask();
 
         // Create some dummy data for the ListView.  Here's a sample weekly forecast
-        String[] data = {
+        String[] data;
+        fetchWeather.execute("Montreal");
+        try {
+            data = fetchWeather.get();
+        } catch (InterruptedException|ExecutionException e) {
+            data = new String[]{"Mon 6/23 - Sunny - 31/17",
+                    "Tue 6/24 - Foggy - 21/8",
+                    "Wed 6/25 - Cloudy - 22/17",
+                    "Thurs 6/26 - Rainy - 18/11",
+                    "Fri 6/27 - Foggy - 21/10",
+                    "Sat 6/28 - TRAPPED IN WEATHERSTATION - 23/18",
+                    "Sun 6/29 - Sunny - 20/7"};
+            e.printStackTrace();
+        }
+        /*{
                 "Mon 6/23 - Sunny - 31/17",
                 "Tue 6/24 - Foggy - 21/8",
                 "Wed 6/25 - Cloudy - 22/17",
@@ -76,7 +92,7 @@ public class ForecastFragment extends Fragment {
                 "Fri 6/27 - Foggy - 21/10",
                 "Sat 6/28 - TRAPPED IN WEATHERSTATION - 23/18",
                 "Sun 6/29 - Sunny - 20/7"
-        };
+        };*/
         List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
 
 
@@ -142,7 +158,7 @@ public class ForecastFragment extends Fragment {
 
                 String urlStr = forecastB.build().toString();
                 URL url = new URL(urlStr);
-                Log.v(LOG_TAG, "Built URI:" + url);
+                //Log.v(LOG_TAG, "Built URI:" + url);
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -252,10 +268,6 @@ public class ForecastFragment extends Fragment {
 
                 highAndLow = formatHighLows(high, low);
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
-            }
-
-            for (String s : resultStrs) {
-                Log.v(LOG_TAG, "Forecast entry: " + s);
             }
             return resultStrs;
         }
