@@ -41,8 +41,9 @@ public class DetailActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
-        }
+         }
 
         return super.onOptionsItemSelected(item);
     }
@@ -50,7 +51,7 @@ public class DetailActivity extends ActionBarActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment {
 
         public PlaceholderFragment() {
         }
@@ -64,7 +65,7 @@ public class DetailActivity extends ActionBarActivity {
 
             if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
                 TextView weatherTView = (TextView)rootView.findViewById(R.id.fragment_detail_textview);
-                String weatherString = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+                String weatherString = intent.getStringExtra(Intent.EXTRA_TEXT);
                 weatherTView.setText(weatherString); }
 
             return rootView;
