@@ -1,5 +1,6 @@
 package com.example.ayesha.sunshine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -8,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class DetailActivity extends ActionBarActivity {
 
@@ -48,7 +50,7 @@ public class DetailActivity extends ActionBarActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public class PlaceholderFragment extends Fragment {
 
         public PlaceholderFragment() {
         }
@@ -58,6 +60,13 @@ public class DetailActivity extends ActionBarActivity {
                                  Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+            Intent intent = getActivity().getIntent();
+
+            if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
+                TextView weatherTView = (TextView)rootView.findViewById(R.id.fragment_detail_textview);
+                String weatherString = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+                weatherTView.setText(weatherString); }
+
             return rootView;
         }
     }

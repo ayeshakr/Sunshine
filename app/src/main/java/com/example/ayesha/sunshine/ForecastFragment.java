@@ -1,5 +1,6 @@
 package com.example.ayesha.sunshine;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,6 +39,8 @@ import java.util.concurrent.ExecutionException;
  * A placeholder fragment containing a simple view.
  */
 public class ForecastFragment extends Fragment {
+
+    private static final String TAG = "ForecastFragment";
 
     ArrayAdapter<String> mForecastAdapter;
 
@@ -121,6 +124,10 @@ public class ForecastFragment extends Fragment {
                 String toastText = finalData[i];
                 int duration = Toast.LENGTH_SHORT;
                 Toast.makeText(getActivity(), toastText, duration).show();
+
+                Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+                detailIntent.putExtra(Intent.EXTRA_TEXT, toastText);
+                startActivity(detailIntent);
             }
         });
 
