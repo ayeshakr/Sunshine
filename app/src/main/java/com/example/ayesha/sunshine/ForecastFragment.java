@@ -265,7 +265,13 @@ public class ForecastFragment extends Fragment {
                 double low = temperatureObject.getDouble(JMIN);
 
                 highAndLow = formatHighLows(high, low);
-                resultStrs[i] = day + " - " + description + " - " + highAndLow;
+                if (i==0) {
+                    resultStrs[i] = "Today - " + description + " - " + highAndLow;
+                } else if (i==1) {
+                    resultStrs[i] = "Tomorrow - " + description + " - " + highAndLow;
+                } else {
+                    resultStrs[i] = day + " - " + description + " - " + highAndLow;
+                }
             }
             return resultStrs;
         }
