@@ -31,11 +31,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -64,41 +61,35 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
         if(id==R.id.action_refresh) {
-           /* FetchWeatherTask fetchW = new FetchWeatherTask();
-            fetchW.execute("Montreal");*/
+            updateWeather();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    public void updateWeather() {
+
+        final FetchWeatherTask fetchWeather = new FetchWeatherTask();
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = sharedPref.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+        fetchWeather.execute(location);
+    }
+
+    public void onStart(){
+        super.onStart();
+        updateWeather();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final FetchWeatherTask fetchWeather = new FetchWeatherTask();
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String location = sharedPref.getString(getString(R.string.pref_location_key), "Dubai");
-        fetchWeather.execute(location);
-
-        String[] data;
-        try {
-            data = fetchWeather.get();
-        } catch (InterruptedException|ExecutionException e) {
-            data = null;
-            e.printStackTrace();
-        }
-
-        List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
-
-        // Now that we have some dummy forecast data, create an ArrayAdapter.
-        // The ArrayAdapter will take data from a source (like our dummy forecast) and
-        // use it to populate the ListView it's attached to.
         mForecastAdapter =
                 new ArrayAdapter<String>(
                         getActivity(), // The current context (this activity)
                         R.layout.list_item_forecast, // The name of the layout ID (TextView).
                         R.id.list_item_forecast_textview, // The ID of the textview to populate.
-                        weekForecast);
+                        new ArrayList<String>());
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -106,11 +97,10 @@ public class ForecastFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
 
-        final String[] finalData = data;
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String toastText = finalData[i];
+                String toastText = mForecastAdapter.getItem(i);
                 int duration = Toast.LENGTH_SHORT;
                 Toast.makeText(getActivity(), toastText, duration).show();
 
@@ -278,6 +268,15 @@ public class ForecastFragment extends Fragment {
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
             return resultStrs;
+        }
+
+        public void onPostExecute(String[] result) {
+            if (result != null) {
+                mForecastAdapter.clear();
+                for (String s : result) {
+                    mForecastAdapter.add(s);
+                }
+            }
         }
     }
  }
