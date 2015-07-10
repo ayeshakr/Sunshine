@@ -220,14 +220,26 @@ public class ForecastFragment extends Fragment {
     }*/
 
         private String formatHighLows(double high, double low) {
-            long rHigh = Math.round(high);
-            long rLow = Math.round(low);
-            String hiLo = rHigh + " / " + rLow;
-            return hiLo;
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String unit = sharedPref.getString(getString(R.string.unitskey), getString(R.string.units_default));
+            if (unit.equals("m")) {
+                long rHigh = Math.round(high);
+                long rLow = Math.round(low);
+                String hiLo = rHigh + " / " + rLow;
+                return hiLo; }
+            else {
+                high = 1.8*high + 32;
+                low = 1.8*low + 32;
+                long rHigh = Math.round(high);
+                long rLow = Math.round(low);
+                String hiLo = rHigh + " / " + rLow;
+                return hiLo;
+            }
         }
 
         private String[] getWeatherDataFromJson(String forecastJsonStr, int numDays)
                 throws JSONException {
+
             //JSON things that we need
             final String JLIST = "list";
             final String JWEATHER = "weather";
@@ -263,6 +275,7 @@ public class ForecastFragment extends Fragment {
                 JSONObject temperatureObject = dayForecast.getJSONObject(JTEMP);
                 double high = temperatureObject.getDouble(JMAX);
                 double low = temperatureObject.getDouble(JMIN);
+
 
                 highAndLow = formatHighLows(high, low);
                 if (i==0) {

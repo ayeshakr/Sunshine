@@ -8,4 +8,7 @@
     <string name="pref_location_label">Location</string>
     <string name="pref_location_key">LocationKey</string>
     <string name="pref_location_default">Montreal</string>
+    <string name="unitstr">Units</string>
+    <string name="unitskey">UnitsKey</string>
+    <string name="units_default">m</string>
 </resources>
