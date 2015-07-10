@@ -64,6 +64,27 @@ public class ForecastFragment extends Fragment {
             updateWeather();
             return true;
         }
+
+        if(id==R.id.action_map) {
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String location = sharedPref.getString(getString(R.string.pref_location_key),
+                    getString(R.string.pref_location_default));
+            String uriStr = "geo:0,0?q=" + location;
+            Uri uri = Uri.parse(uriStr);
+            intent.setData(uri);
+
+            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivity(intent);
+                return true;
+            } else {
+                String toastText = "No map application available";
+                int duration = Toast.LENGTH_SHORT;
+                Toast.makeText(getActivity(), toastText, duration).show();
+                return true;
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -220,8 +241,11 @@ public class ForecastFragment extends Fragment {
     }*/
 
         private String formatHighLows(double high, double low) {
+
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
             String unit = sharedPref.getString(getString(R.string.unitskey), getString(R.string.units_default));
+
             if (unit.equals("m")) {
                 long rHigh = Math.round(high);
                 long rLow = Math.round(low);
