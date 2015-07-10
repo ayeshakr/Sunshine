@@ -66,26 +66,30 @@ public class ForecastFragment extends Fragment {
         }
 
         if(id==R.id.action_map) {
-
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String location = sharedPref.getString(getString(R.string.pref_location_key),
-                    getString(R.string.pref_location_default));
-            String uriStr = "geo:0,0?q=" + location;
-            Uri uri = Uri.parse(uriStr);
-            intent.setData(uri);
-
-            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                startActivity(intent);
-                return true;
-            } else {
-                String toastText = "No map application available";
-                int duration = Toast.LENGTH_SHORT;
-                Toast.makeText(getActivity(), toastText, duration).show();
-                return true;
+            displayInMap();
+            return true;
             }
-        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    public void displayInMap() {
+        //get location from Sharedpreferences
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = sharedPref.getString(getString(R.string.pref_location_key),
+                getString(R.string.pref_location_default));
+        String uriStr = "geo:0,0?q=" + location;
+        Uri uri = Uri.parse(uriStr);
+        intent.setData(uri);
+        //if there is a map app that can be used, launch it, else display a toast msg.
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            String toastText = "No map application available";
+            int duration = Toast.LENGTH_SHORT;
+            Toast.makeText(getActivity(), toastText, duration).show();
+        }
     }
 
     public void updateWeather() {
