@@ -12,4 +12,5 @@
     <string name="unitskey">UnitsKey</string>
     <string name="units_default">m</string>
     <string name="map_title">View on map</string>
+    <string name="detail_share">Share</string>
 </resources>
