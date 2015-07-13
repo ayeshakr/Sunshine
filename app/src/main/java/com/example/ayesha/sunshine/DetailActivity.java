@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 //import android.support.v7.widget.ShareActionProvider;
 
@@ -73,12 +74,12 @@ public class DetailActivity extends ActionBarActivity {
         public PlaceholderFragment() {
             setHasOptionsMenu(true);
         }
-
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             inflater.inflate(R.menu.detail_fragment, menu);
             MenuItem item = menu.findItem(R.id.menu_item_share);
             ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
 
             if (mShareActionProvider != null) {
                 mShareActionProvider.setShareIntent(createShareForecastIntent());
@@ -106,6 +107,11 @@ public class DetailActivity extends ActionBarActivity {
         }
 
         private Intent createShareForecastIntent() {
+
+            String text = "You know your friends can check the weather themselves, right?";
+            int duration = Toast.LENGTH_SHORT;
+            Toast.makeText(getActivity(), text, duration).show();
+
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareStr);
