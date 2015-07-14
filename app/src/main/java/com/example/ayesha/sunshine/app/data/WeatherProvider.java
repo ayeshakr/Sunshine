@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.ayesha.sunshine.data;
+package com.example.ayesha.sunshine.app.data;
 
 import android.annotation.TargetApi;
 import android.content.ContentProvider;
@@ -28,7 +28,7 @@ public class WeatherProvider extends ContentProvider {
 
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
-    private WeatherDbHelper mOpenHelper;
+    private com.example.ayesha.sunshine.app.data.WeatherDbHelper mOpenHelper;
 
     static final int WEATHER = 100;
     static final int WEATHER_WITH_LOCATION = 101;
@@ -139,7 +139,7 @@ public class WeatherProvider extends ContentProvider {
      */
     @Override
     public boolean onCreate() {
-        mOpenHelper = new WeatherDbHelper(getContext());
+        mOpenHelper = new com.example.ayesha.sunshine.app.data.WeatherDbHelper(getContext());
         return true;
     }
 
