@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.sunshine.app.data;
+package com.example.ayesha.sunshine.app.data;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -142,7 +142,7 @@ public class TestDb extends AndroidTestCase {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         // Second Step (Weather): Create weather values
-        ContentValues weatherValues = TestUtilities.createWeatherValues(locationRowId);
+        ContentValues weatherValues = com.example.ayesha.sunshine.app.data.TestUtilities.createWeatherValues(locationRowId);
 
         // Third Step (Weather): Insert ContentValues into database and get a row ID back
         long weatherRowId = db.insert(WeatherContract.WeatherEntry.TABLE_NAME, null, weatherValues);
@@ -164,7 +164,7 @@ public class TestDb extends AndroidTestCase {
         assertTrue( "Error: No Records returned from location query", weatherCursor.moveToFirst() );
 
         // Fifth Step: Validate the location Query
-        TestUtilities.validateCurrentRecord("testInsertReadDb weatherEntry failed to validate",
+        com.example.ayesha.sunshine.app.data.TestUtilities.validateCurrentRecord("testInsertReadDb weatherEntry failed to validate",
                 weatherCursor, weatherValues);
 
         // Move the cursor to demonstrate that there is only one record in the database
@@ -191,7 +191,7 @@ public class TestDb extends AndroidTestCase {
 
         // Second Step: Create ContentValues of what you want to insert
         // (you can use the createNorthPoleLocationValues if you wish)
-        ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
+        ContentValues testValues = com.example.ayesha.sunshine.app.data.TestUtilities.createNorthPoleLocationValues();
 
         // Third Step: Insert ContentValues into database and get a row ID back
         long locationRowId;
@@ -222,7 +222,7 @@ public class TestDb extends AndroidTestCase {
         // Fifth Step: Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
-        TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed",
+        com.example.ayesha.sunshine.app.data.TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed",
                 cursor, testValues);
 
         // Move the cursor to demonstrate that there is only one record in the database
