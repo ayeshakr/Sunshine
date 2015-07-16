@@ -1,4 +1,4 @@
-package com.example.ayesha.sunshine;
+package com.example.ayesha.sunshine.app;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +18,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.ayesha.sunshine.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

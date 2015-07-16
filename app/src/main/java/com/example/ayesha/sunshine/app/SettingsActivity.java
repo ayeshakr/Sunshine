@@ -1,10 +1,12 @@
-package com.example.ayesha.sunshine;
+package com.example.ayesha.sunshine.app;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+
+import com.example.ayesha.sunshine.R;
 
 public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener {

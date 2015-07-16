@@ -1,4 +1,4 @@
-package com.example.ayesha.sunshine;
+package com.example.ayesha.sunshine.app;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.ayesha.sunshine.R;
 
 public class DetailActivity extends ActionBarActivity {
 
@@ -93,7 +95,7 @@ public class DetailActivity extends ActionBarActivity {
                 String weatherString = intent.getStringExtra(Intent.EXTRA_TEXT);
                 weatherTView.setText(weatherString);
 
-                shareStr = intent.getStringExtra(Intent.EXTRA_TEXT) + HASHTAG;
+                shareStr = weatherString + HASHTAG;
             }
 
             return rootView;
