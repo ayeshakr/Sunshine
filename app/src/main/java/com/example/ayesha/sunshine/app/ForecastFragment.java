@@ -141,7 +141,7 @@ public class ForecastFragment extends Fragment {
     }
 
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
-
+        //lol this is for my commit streak
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
         @Override
