@@ -306,7 +306,6 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
                 mContext.getContentResolver().bulkInsert(WeatherEntry.CONTENT_URI, cvArray);
-
             }
 
             // Sort order:  Ascending, by date.
@@ -315,7 +314,6 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
                     locationSetting, System.currentTimeMillis());
 
             // Students: Uncomment the next lines to display what what you stored in the bulkInsert
-
             Cursor cur = mContext.getContentResolver().query(weatherForLocationUri,
                     null, null, null, sortOrder);
 

@@ -28,7 +28,7 @@ public class WeatherProvider extends ContentProvider {
 
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
-    private com.example.ayesha.sunshine.app.data.WeatherDbHelper mOpenHelper;
+    private WeatherDbHelper mOpenHelper;
 
     static final int WEATHER = 100;
     static final int WEATHER_WITH_LOCATION = 101;
@@ -39,7 +39,7 @@ public class WeatherProvider extends ContentProvider {
 
     static{
         sWeatherByLocationSettingQueryBuilder = new SQLiteQueryBuilder();
-        
+
         //This is an inner join which looks like
         //weather INNER JOIN location ON weather.location_id = location._id
         sWeatherByLocationSettingQueryBuilder.setTables(
@@ -139,14 +139,13 @@ public class WeatherProvider extends ContentProvider {
      */
     @Override
     public boolean onCreate() {
-        mOpenHelper = new com.example.ayesha.sunshine.app.data.WeatherDbHelper(getContext());
+        mOpenHelper = new WeatherDbHelper(getContext());
         return true;
     }
 
     /*
         Students: Here's where you'll code the getType function that uses the UriMatcher.  You can
         test this by uncommenting testGetType in TestProvider.
-
      */
     @Override
     public String getType(Uri uri) {

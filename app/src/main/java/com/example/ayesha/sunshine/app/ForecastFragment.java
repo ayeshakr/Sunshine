@@ -78,14 +78,19 @@ public class ForecastFragment extends Fragment {
     }
 
     private void updateWeather() {
-
         FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity(), mForecastAdapter);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String location = sharedPref.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = prefs.getString(getString(R.string.pref_location_key),
+                getString(R.string.pref_location_default));
+        weatherTask.execute(location);
+    }
 
+    @Override
+    public void onStart() {
         super.onStart();
         updateWeather();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
