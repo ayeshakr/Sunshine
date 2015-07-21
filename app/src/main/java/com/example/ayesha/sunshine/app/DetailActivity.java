@@ -50,7 +50,7 @@ public class DetailActivity extends ActionBarActivity {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
          }
-        
+
 
         return super.onOptionsItemSelected(item);
     }

@@ -3,11 +3,9 @@ package com.example.ayesha.sunshine.app;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,20 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -92,15 +77,12 @@ public class ForecastFragment extends Fragment {
         }
     }
 
-    public void updateWeather() {
+    private void updateWeather() {
 
-        final FetchWeatherTask fetchWeather = new FetchWeatherTask();
+        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity(), mForecastAdapter);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String location = sharedPref.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
-        fetchWeather.execute(location);
-    }
 
-    public void onStart(){
         super.onStart();
         updateWeather();
     }
@@ -138,7 +120,7 @@ public class ForecastFragment extends Fragment {
         return rootView;
     }
 
-    public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
+   /* public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         //lol this is for my commit streak
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
@@ -242,7 +224,7 @@ public class ForecastFragment extends Fragment {
         // it must be converted to milliseconds in order to be converted to valid date.
         SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
         return shortenedDateFormat.format(time);
-    }*/
+    }
 
         private String formatHighLows(double high, double low) {
 
@@ -325,6 +307,6 @@ public class ForecastFragment extends Fragment {
                 }
             }
         }
-    }
+    }*/
  }
 
