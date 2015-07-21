@@ -19,8 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.ayesha.sunshine.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
