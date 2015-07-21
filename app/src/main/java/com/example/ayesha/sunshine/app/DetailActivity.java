@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class DetailActivity extends ActionBarActivity {
 
@@ -51,12 +50,7 @@ public class DetailActivity extends ActionBarActivity {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
          }
-
-        if (id == R.id.menu_item_share) {
-            String text = "You know your friends can check the weather themselves, right?";
-            int duration = Toast.LENGTH_SHORT;
-            Toast.makeText(this, text, duration).show();
-        }
+        
 
         return super.onOptionsItemSelected(item);
     }
