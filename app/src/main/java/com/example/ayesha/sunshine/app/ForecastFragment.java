@@ -1,10 +1,8 @@
 package com.example.ayesha.sunshine.app;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,21 +10,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.example.ayesha.sunshine.app.data.WeatherContract;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class ForecastFragment extends Fragment {
 
-    private static final String TAG = "ForecastFragment";
-
-    ArrayAdapter<String> mForecastAdapter;
+    private ForecastAdapter mForecastAdapter;
 
     public ForecastFragment() {
     }
@@ -34,6 +27,7 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
     }
 
@@ -44,64 +38,34 @@ public class ForecastFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
             updateWeather();
             return true;
         }
-
-        if (id == R.id.action_map) {
-            displayInMap();
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
-
-    public void displayInMap() {
-        //get location from Sharedpreferences
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String location = sharedPref.getString(getString(R.string.pref_location_key),
-                getString(R.string.pref_location_default));
-        String uriStr = "geo:0,0?q=" + location;
-        Uri uri = Uri.parse(uriStr);
-        intent.setData(uri);
-        //if there is a map app that can be used, launch it, else display a toast msg.
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivity(intent);
-        } else {
-            String toastText = "No map application available";
-            int duration = Toast.LENGTH_SHORT;
-            Toast.makeText(getActivity(), toastText, duration).show();
-        }
-    }
-
-    private void updateWeather() {
-        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity(), mForecastAdapter);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String location = prefs.getString(getString(R.string.pref_location_key),
-                getString(R.string.pref_location_default));
-        weatherTask.execute(location);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        updateWeather();
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        String locationSetting = Utility.getPreferredLocation(getActivity());
 
-        mForecastAdapter =
-                new ArrayAdapter<String>(
-                        getActivity(), // The current context (this activity)
-                        R.layout.list_item_forecast, // The name of the layout ID (TextView).
-                        R.id.list_item_forecast_textview, // The ID of the textview to populate.
-                        new ArrayList<String>());
+        // Sort order:  Ascending, by date.
+        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+                locationSetting, System.currentTimeMillis());
+
+        Cursor cur = getActivity().getContentResolver().query(weatherForLocationUri,
+                null, null, null, sortOrder);
+
+        // The CursorAdapter will take data from our cursor and populate the ListView
+        // However, we cannot use FLAG_AUTO_REQUERY since it is deprecated, so we will end
+        // up with an empty list the first time we run.
+        mForecastAdapter = new ForecastAdapter(getActivity(), cur, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -109,19 +73,18 @@ public class ForecastFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String toastText = mForecastAdapter.getItem(i);
-                int duration = Toast.LENGTH_SHORT;
-                Toast.makeText(getActivity(), toastText, duration).show();
-
-                Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
-                detailIntent.putExtra(Intent.EXTRA_TEXT, toastText);
-                startActivity(detailIntent);
-            }
-        });
-
         return rootView;
+    }
+
+    private void updateWeather() {
+        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
+        String location = Utility.getPreferredLocation(getActivity());
+        weatherTask.execute(location);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
     }
 }
